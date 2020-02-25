@@ -11,7 +11,7 @@ const logs = require('./api/logs')
 
 const app = express()
 
-mongoose.connect('mongodb://localhost/travel-log', {
+mongoose.connect(process.env.DATABASE_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
@@ -20,7 +20,7 @@ mongoose.connect('mongodb://localhost/travel-log', {
 app.use(morgan('common')) //mantem um log de cada call feita ao servidor
 app.use(helmet()) // modifica headers do pedido do navegador para segurança
 app.use(cors({
-    origin: 'http://localhost:3000'
+    origin: process.env.CORS_ORIGIN
 }))
 app.use(express.json())
 
@@ -35,7 +35,7 @@ app.use('/api/logs', logs)
 app.use(middlewares.notFound)
 app.use(middlewares.errorHandler)
 
-const port = 1337
+const port = process.env.PORT || 1337
 app.listen(port, () => {
     console.log(`Ouvindo na porta ${port}`)
 })
